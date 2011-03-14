@@ -9,8 +9,8 @@
 
 class Mobile_Detect {
     
-    protected $accept	    = null;
-    protected $userAgent    = null;
+    protected $accept;
+    protected $userAgent;
     
     protected $isMobile     = false;
     protected $isAndroid    = null;
@@ -18,17 +18,19 @@ class Mobile_Detect {
     protected $isOpera      = null;
     protected $isPalm       = null;
     protected $isWindows    = null;
-    protected $isIphone     = null;
     protected $isGeneric    = null;
+    protected $isIphone     = null;
+    protected $isIpad       = null;
 
     protected $devices = array(
         "android"       => "android",
         "blackberry"    => "blackberry",
         "iphone"        => "(iphone|ipod)",
-        "opera"         => "opera mini",
+        "ipad"          => "ipad",
+        "opera"         => "(opera mini|opera mobi)",
         "palm"          => "(avantgo|blazer|elaine|hiptop|palm|plucker|xiino)",
         "windows"       => "windows ce; (iemobile|ppc|smartphone)",
-        "generic"       => "(kindle|mobile|mmp|midp|o2|pda|pocket|psp|symbian|smartphone|treo|up.browser|up.link|vodafone|wap)"
+        "generic"       => "(kindle|mobile|mmp|midp|o2|pda|pocket|psp|symbian|smartphone|treo|up.browser|up.link|vodafone|wap|nokia|samsung|SonyEricsson)"
     );
 
 
@@ -58,7 +60,7 @@ class Mobile_Detect {
      * @return bool
      */
     public function __call($name, $arguments) {
-        $device = substr($name, 2);
+        $device = strtolower(substr($name, 2));
         if ($name == "is" . ucfirst($device)) {
             return $this->isDevice($device);
         } else {
@@ -80,7 +82,7 @@ class Mobile_Detect {
         $var    = "is" . ucfirst($device);
         $return = $this->$var === null ? (bool) preg_match("/" . $this->devices[$device] . "/i", $this->userAgent) : $this->$var;
 
-        if ($device != 'generic' && $return == true) {
+        if (($device != 'generic' && $return == true) || $device == 'ipad') {
             $this->isGeneric = false;
         }
 

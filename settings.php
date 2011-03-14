@@ -241,7 +241,7 @@ if (($settings['templates']['autodetect'] == true) && (isset($_SERVER['HTTP_USER
 		include_once('Mobile_Detect.php');
 		$detect = new Mobile_Detect();
 
-		if ($detect->isMobile()) {
+		if ($detect->isMobile() && !$detect->isIpad()) {
 			$settings['tpl_path'] = $settings['templates']['mobile']; 
 		} else { 
 			$settings['tpl_path'] = $settings['templates']['default']; 
